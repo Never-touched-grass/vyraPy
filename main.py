@@ -14,7 +14,15 @@ while cmd != "break":
     cmd = input(">")
     if cmd == "print" :
         cmd = input(":")
-        print(cmd)
+        if cmd != "access":
+            print(cmd)
+        elif cmd == "access":
+            cmd = input("name:")
+            for l in range(len(varNames)):
+                if varNames[l] == cmd:
+                    print(varVals[l])
+                else:
+                    print("var '" + cmd + "' doesn't exist.")
     elif cmd == "if":
         choice = input("num/var:")
         if choice == "num":
@@ -60,7 +68,7 @@ while cmd != "break":
         funcCodes.append([])
         while codeBlock != "endFunc":
             codeBlock = input("code:")
-            funcCodes[0].append(codeBlock)
+            funcCodes[-1].append(codeBlock)
     elif cmd == "callFunc":
         fName = input("name:")
         for j in range(len(funcNames)):
@@ -70,7 +78,17 @@ while cmd != "break":
                         line = funcCodes[j][o][6:]
                         out = re.findall(r'"(.*?)"', line)
                         print(out[0])
-                    elif funcCodes[j][o].startsWith("var "):
-                        print("Feature available soon.")
+                    elif funcCodes[j][o].startswith("var "):
+                        parts = funcCodes[j][o].split("=")
+                        if len(parts) == 2:
+                            varNames.append(parts[0].replace("var ", "").strip())
+                            varVals.append(parts[1].strip())
+                    elif funcCodes[j][o].startswith("printf access "):
+                        vName = funcCodes[j][o].split(" ", 2)[-1]
+                        if vName in varNames:
+                            index = varNames.index(vName)
+                            print(varVals[index])
+                        else:
+                            print(f"var '{vName}' doesn't exist.")
     else:
         print("'" + cmd + "' is not a valid command.")
