@@ -90,5 +90,19 @@ while cmd != "break":
                             print(varVals[index])
                         else:
                             print(f"var '{vName}' doesn't exist.")
+    elif cmd == "while":
+        cmd = input("condition:")
+        parts = cmd.split()
+        for k in range(len(varNames)):
+            if varNames[k] == parts[0]:
+                if parts[1] == "!=":
+                    try: 
+                            while varVals[k] != int(parts[2]):
+                                print("Hello")
+                                varVals[k] = int(varVals[k])
+                                varVals[k] += 1
+                            varVals[k] = str(varVals[k])
+                    except ValueError:
+                        print("ERROR: var '" + varNames[k] + "' is not an integer or floating point.")
     else:
         print("'" + cmd + "' is not a valid command.")
